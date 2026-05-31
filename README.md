@@ -1,98 +1,473 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Job Board API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-level RESTful Job Board API built with NestJS, Prisma, and PostgreSQL. Features JWT authentication, role-based access control, job filtering with pagination, CV file upload, email notifications, and auto-generated Swagger documentation.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Tech Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **Framework** — NestJS
+- **Language** — TypeScript
+- **Database** — PostgreSQL
+- **ORM** — Prisma v6
+- **Authentication** — JWT (JSON Web Tokens)
+- **Password Hashing** — bcrypt
+- **Validation** — class-validator, class-transformer
+- **File Upload** — Multer
+- **Email** — Nodemailer + @nestjs-modules/mailer
+- **Documentation** — Swagger UI
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Features
+
+- User registration and login with roles (CANDIDATE, COMPANY, ADMIN)
+- JWT-based authentication
+- Role-based access control
+- Companies can post, update and delete jobs
+- Candidates can apply for jobs with CV upload (PDF only)
+- Email notification sent to candidate on successful application
+- Job search and filtering by title, location and type
+- Pagination on job listings
+- Auto-generated Swagger API documentation
+- Custom exception filter for consistent error responses
+
+---
+
+## Project Structure
+
+```
+job-board-api/
+├── src/
+│   ├── auth/
+│   │   ├── dto/
+│   │   │   ├── register.dto.ts
+│   │   │   └── login.dto.ts
+│   │   ├── guards/
+│   │   │   ├── jwt.guard.ts
+│   │   │   └── roles.guard.ts
+│   │   ├── strategies/
+│   │   │   └── jwt.strategy.ts
+│   │   ├── decorators/
+│   │   │   ├── get-user.decorator.ts
+│   │   │   └── roles.decorator.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.module.ts
+│   │   └── auth.service.ts
+│   ├── jobs/
+│   │   ├── dto/
+│   │   │   ├── create-job.dto.ts
+│   │   │   ├── update-job.dto.ts
+│   │   │   └── filter-job.dto.ts
+│   │   ├── jobs.controller.ts
+│   │   ├── jobs.module.ts
+│   │   └── jobs.service.ts
+│   ├── applications/
+│   │   ├── dto/
+│   │   │   └── create-application.dto.ts
+│   │   ├── applications.controller.ts
+│   │   ├── applications.module.ts
+│   │   └── applications.service.ts
+│   ├── mail/
+│   │   ├── mail.module.ts
+│   │   └── mail.service.ts
+│   ├── prisma/
+│   │   ├── prisma.module.ts
+│   │   └── prisma.service.ts
+│   ├── common/
+│   │   └── filters/
+│   │       └── http-exception.filter.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── prisma/
+│   └── schema.prisma
+├── uploads/
+├── .env.example
+└── package.json
 ```
 
-## Compile and run the project
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js v18 or higher
+- PostgreSQL
+- npm
+- A Gmail account with App Password enabled
+
+### Installation
+
+1. Clone the repository
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/michael-lfc/nest-job-board-api.git
+cd nest-job-board-api
 ```
 
-## Run tests
+2. Install dependencies
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+3. Set up environment variables
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+cp .env.example .env
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Update `.env` with your values:
 
-## Resources
+```env
+DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/job_board_db"
+JWT_SECRET="yourjwtsecret"
+MAIL_HOST="smtp.gmail.com"
+MAIL_PORT=587
+MAIL_USER="youremail@gmail.com"
+MAIL_PASS="yourgoogleapppassword"
+MAIL_FROM="youremail@gmail.com"
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+4. Run database migrations
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npx prisma migrate dev
+```
 
-## Support
+5. Start the development server
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run start:dev
+```
 
-## Stay in touch
+The API will be running at `http://localhost:3000`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## API Documentation
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Once the server is running, visit:
+
+```
+http://localhost:3000/api/docs
+```
+
+Swagger UI provides interactive documentation for all endpoints. You can test protected routes by clicking the **Authorize** button and pasting your JWT token.
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | PostgreSQL connection string |
+| `JWT_SECRET` | Secret key for signing JWT tokens |
+| `MAIL_HOST` | SMTP host (smtp.gmail.com for Gmail) |
+| `MAIL_PORT` | SMTP port (587 for Gmail) |
+| `MAIL_USER` | Gmail address used to send emails |
+| `MAIL_PASS` | Google App Password |
+| `MAIL_FROM` | From address shown on emails |
+
+### Generating a Google App Password
+
+1. Go to myaccount.google.com
+2. Click Security
+3. Enable 2-Step Verification
+4. Search App Passwords
+5. Create one for Mail
+6. Copy the 16 character password into MAIL_PASS
+
+---
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/auth/register` | Register a new user | No |
+| POST | `/api/auth/login` | Login and get JWT token | No |
+
+### Jobs
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/jobs` | Get all jobs (filterable + paginated) | No |
+| GET | `/api/jobs/:id` | Get a single job | No |
+| POST | `/api/jobs` | Post a new job | Company only |
+| PATCH | `/api/jobs/:id` | Update own job | Company only |
+| DELETE | `/api/jobs/:id` | Delete own job | Company only |
+
+### Applications
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/jobs/:jobId/apply` | Apply for a job with CV | Candidate only |
+| GET | `/api/jobs/:jobId/applications` | Get applications for a job | Company only |
+| GET | `/api/applications/me` | Get my applications | Candidate only |
+
+---
+
+## Job Filtering and Pagination
+
+```
+GET /api/jobs?title=developer&location=Lagos&type=FULL_TIME&page=1&limit=10
+```
+
+| Query Param | Type | Description |
+|-------------|------|-------------|
+| `title` | string | Filter by job title (case insensitive) |
+| `location` | string | Filter by location (case insensitive) |
+| `type` | enum | Filter by job type |
+| `page` | number | Page number (default: 1) |
+| `limit` | number | Items per page (default: 10) |
+
+Paginated response includes a `meta` object:
+
+```json
+{
+  "message": "Jobs retrieved successfully",
+  "data": [...],
+  "meta": {
+    "total": 50,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 5
+  }
+}
+```
+
+---
+
+## Request & Response Examples
+
+### Register
+
+**Request**
+```json
+POST /api/auth/register
+{
+  "email": "michael@gmail.com",
+  "password": "password123",
+  "name": "Michael",
+  "role": "CANDIDATE"
+}
+```
+
+**Response**
+```json
+{
+  "message": "Registration successful",
+  "data": {
+    "id": 1,
+    "email": "michael@gmail.com",
+    "name": "Michael",
+    "role": "CANDIDATE"
+  }
+}
+```
+
+---
+
+### Post a Job
+
+**Request**
+```json
+POST /api/jobs
+Authorization: Bearer <company_token>
+{
+  "title": "Backend Developer",
+  "description": "We are looking for a backend developer with NestJS experience",
+  "location": "Lagos, Nigeria",
+  "type": "FULL_TIME",
+  "salary": "$1000 - $2000"
+}
+```
+
+**Response**
+```json
+{
+  "message": "Job created successfully",
+  "data": {
+    "id": 1,
+    "title": "Backend Developer",
+    "description": "We are looking for a backend developer with NestJS experience",
+    "location": "Lagos, Nigeria",
+    "type": "FULL_TIME",
+    "salary": "$1000 - $2000",
+    "companyId": 1,
+    "createdAt": "2026-05-31T09:00:00.000Z",
+    "updatedAt": "2026-05-31T09:00:00.000Z"
+  }
+}
+```
+
+---
+
+### Apply for a Job
+
+```
+POST /api/jobs/1/apply
+Authorization: Bearer <candidate_token>
+Body: multipart/form-data
+  cv: <PDF file>
+```
+
+**Response**
+```json
+{
+  "message": "Application submitted successfully",
+  "data": {
+    "id": 1,
+    "cvUrl": "uploads/cv-1234567890.pdf",
+    "status": "PENDING",
+    "candidateId": 1,
+    "jobId": 1,
+    "createdAt": "2026-05-31T09:00:00.000Z"
+  }
+}
+```
+
+---
+
+## Authentication
+
+This API uses JWT Bearer token authentication. After logging in, include the token in the `Authorization` header:
+
+```
+Authorization: Bearer <your_token>
+```
+
+Tokens expire after **7 days**.
+
+---
+
+## Roles
+
+| Role | Permissions |
+|------|------------|
+| `CANDIDATE` | Apply for jobs, view own applications |
+| `COMPANY` | Post jobs, update and delete own jobs, view applications for own jobs |
+| `ADMIN` | All permissions |
+
+---
+
+## Job Types
+
+```
+FULL_TIME
+PART_TIME
+CONTRACT
+INTERNSHIP
+REMOTE
+```
+
+---
+
+## Application Statuses
+
+```
+PENDING
+REVIEWED
+ACCEPTED
+REJECTED
+```
+
+---
+
+## Error Responses
+
+All errors follow this consistent format:
+
+```json
+{
+  "statusCode": 404,
+  "message": "Job with id 999 not found",
+  "timestamp": "2026-05-31T09:00:00.000Z",
+  "path": "/api/jobs/999"
+}
+```
+
+| Status Code | Meaning |
+|-------------|---------|
+| 400 | Bad Request — validation failed |
+| 401 | Unauthorized — missing or invalid token |
+| 403 | Forbidden — insufficient permissions |
+| 404 | Not Found — resource does not exist |
+| 409 | Conflict — already applied for this job |
+| 500 | Internal Server Error |
+
+---
+
+## Database Schema
+
+```prisma
+enum Role {
+  CANDIDATE
+  COMPANY
+  ADMIN
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  ACCEPTED
+  REJECTED
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  password     String
+  role         Role          @default(CANDIDATE)
+  name         String
+  jobs         Job[]
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Job {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  location     String
+  type         JobType
+  salary       String?
+  company      User          @relation(fields: [companyId], references: [id])
+  companyId    Int
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Application {
+  id          Int               @id @default(autoincrement())
+  cvUrl       String
+  status      ApplicationStatus @default(PENDING)
+  candidate   User              @relation(fields: [candidateId], references: [id])
+  candidateId Int
+  job         Job               @relation(fields: [jobId], references: [id])
+  jobId       Int
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@unique([candidateId, jobId])
+}
+```
+
+---
+
+## Author
+
+**Michael** — Backend Developer
