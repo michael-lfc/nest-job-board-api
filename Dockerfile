@@ -12,9 +12,8 @@ ARG DATABASE_URL
 ENV DATABASE_URL=$DATABASE_URL
 
 RUN npx prisma generate
-
-RUN npm run build && ls -R dist
+RUN npm run build && find dist
 
 EXPOSE 3000
 
-CMD ["node", "dist/main"]
+CMD ["node", "dist/src/main"]
